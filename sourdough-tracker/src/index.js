@@ -28,7 +28,6 @@ class Page extends React.Component{
 class OpenForm extends React.Component{
 
 	showForm(){
-		console.log("showing form")
 		document.getElementById("form").style.display = "block";
 	}
 	render(){
@@ -56,6 +55,10 @@ class Graph extends React.Component{
 
 class Form extends React.Component{
 
+	hideForm(){
+		document.getElementById("form").style.display = "none";
+	}
+
 	render(){
 		const processFormEntryTitles = ["Amount of Flour (grams)", "Amount of Water (grams)", "Amount of Sourdough Starter (grams)",
 							     "Number of Stretch and Folds", "Autolyse Time (minutes)", "Bulk Fermentation Time (minutes)", "Bake Time (minutes)",
@@ -78,6 +81,11 @@ class Form extends React.Component{
 				{processFormEntries}
 				<div class = "formHeader"> And Your Results </div>
 				{resultsFormEntries}
+
+				<div>
+					<button> Submit </button>
+					<button onClick = {() => this.hideForm()}> Cancel </button>
+				</div>
  
 			</div> 
 		)
