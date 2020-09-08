@@ -1,0 +1,72 @@
+.body{
+	padding:0px;
+	margin:0px;
+}
+
+.App {
+  text-align: center;
+  background-color: #f1e8b8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #1f2041;
+}
+
+.graph{
+	
+}
+
+.openForm{
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 3px solid #1f2041;
+	border-radius: 25px;
+	background-color: #dd6031;
+	position: absolute;
+	top: 20px;
+	right: 15px;
+}
+
+.openForm:hover{
+	opacity: .7;
+	cursor: pointer;
+	transition-duration: .25s;
+}
+
+.plus{
+	float: left;
+	font-weight: bolder;
+	padding-right: 5px;
+}
+
+.buttonName{
+	float: right;
+}
+
+
+#form{
+	display: none;
+	background-color: #dd6031;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	color: #1f2041;
+	transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	padding: 20px;
+}
+
+.formHeader{
+	font-size: 50px;
+}
+
+.entry{
+	/*float: left;*/
+	text-align: left;
+	/*align-self: left;*/
+}
+
