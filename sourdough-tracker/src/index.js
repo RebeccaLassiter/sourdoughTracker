@@ -34,28 +34,7 @@ class Page extends React.Component{
 		// }, []);
 
 		//this bit should add data to the database
-		const data = {
-					"gramsFlour": 55.5,
-					"gramsWater": 23.2,
-					"gramsStarter": 5.01,
-					"numStretchFold": 5,
-					"autolyseTime": 15,
-					"bulkFermentTime": 55,
-					"bakeTime": 45,
-					"overallQuality": 7, 
-					"rise": 8,
-					"crumb": 6,
-					"ear": 9, 
-					"flavor": 5 
-				}
-		fetch("/bakes", {
-	        method:"POST",
-	        cache: "no-cache",
-	        headers:{
-	            "content_type":"application/json",
-	        },
-	        body:JSON.stringify(data)
-	        })
+		
 
 		//getting the data from the data base
 		fetch('/bakes')
@@ -63,7 +42,7 @@ class Page extends React.Component{
 		        .then(data => this.setState({bakes: data}));
 
 
-		console.log("just got bakes data: ", this.state.bakes)
+		// console.log("just got data", this.state.bakes)
 		
 
 	  
@@ -112,9 +91,87 @@ class Graph extends React.Component{
 
 class Form extends React.Component{
 
+	constructor(props) {    
+      super(props);    
+      this.state = {      
+        			"gramsFlour": null,
+					"gramsWater": null,
+					"gramsStarter": null,
+					"numStretchFold": null,
+					"autolyseTime": null,
+					"bulkFermentTime": null,
+					"bakeTime": null,
+					"overallQuality": null, 
+					"rise": null,
+					"crumb": null,
+					"crust": null, 
+					"flavor": null    
+      };  
+    }
+
+	submitForm(){
+
+		this.sendData()
+		this.hideForm()
+	
+	}
+
+	cancelForm(){
+		this.setState({      
+        			"gramsFlour": null,
+					"gramsWater": null,
+					"gramsStarter": null,
+					"numStretchFold": null,
+					"autolyseTime": null,
+					"bulkFermentTime": null,
+					"bakeTime": null,
+					"overallQuality": null, 
+					"rise": null,
+					"crumb": null,
+					"crust": null, 
+					"flavor": null    
+      	});
+		this.hideForm();
+
+	}
+
+	sendData(){
+		// const data = {
+		// 			"gramsFlour": 55.5,
+		// 			"gramsWater": 23.2,
+		// 			"gramsStarter": 5.01,
+		// 			"numStretchFold": 5,
+		// 			"autolyseTime": 15,
+		// 			"bulkFermentTime": 55,
+		// 			"bakeTime": 45,
+		// 			"overallQuality": 7, 
+		// 			"rise": 8,
+		// 			"crumb": 6,
+		// 			"ear": 9, 
+		// 			"flavor": 5 
+		// 		}
+
+		const data = this.state
+		fetch("/bakes", {
+	        method:"POST",
+	        cache: "no-cache",
+	        headers:{
+	            "content_type":"application/json",
+	        },
+	        body:JSON.stringify(data)
+	        })
+	}
+
 	hideForm(){
 		document.getElementById("form").style.display = "none";
+		
 	}
+
+	 myChangeHandler = (event) => {
+	 let nam =  event.target.name;
+	 let val = event.target.value;
+	 this.setState({[nam]: val});
+  }
 
 	render(){
 		const processFormEntryTitles = ["Amount of Flour (grams)", "Amount of Water (grams)", "Amount of Sourdough Starter (grams)",
@@ -122,14 +179,29 @@ class Form extends React.Component{
 							     ]
 		const resultsFormEntryTitles = ["Overall Quality", "Rise", "Crumb", "Crust", "Flavor"]
 
+		const mapTitlesToState = {      
+        			"Amount of Flour (grams)": "gramsFlour",
+					"Amount of Water (grams)": "gramsWater",
+					"Amount of Sourdough Starter (grams)": "gramsStarter",
+					"Number of Stretch and Folds": "numStretchFold",
+					"Autolyse Time (minutes)": "autolyseTime",
+					"Bulk Fermentation Time (minutes)": "bulkFermentTime",
+					"Bake Time (minutes)": "bakeTime",
+					"Overall Quality": "overallQuality",
+					"Rise": "rise",
+					"Crumb": "crumb",
+					"Crust": "crust", 
+					"Flavor":"flavor"    
+      }
+
 		const processFormEntries = processFormEntryTitles.map( x =>
 		{
-			return <ProcessFormEntry title = {x} key = {x} />; 
+			return <ProcessFormEntry title = {x} key = {x} name ={mapTitlesToState[x]} onChange = {this.myChangeHandler}/>; 
 		});
 
 		const resultsFormEntries = resultsFormEntryTitles.map( x =>
 		{
-			return <ResultsFormEntry title = {x} key = {x} />; 
+			return <ResultsFormEntry title = {x} key = {x} name = {mapTitlesToState[x]} onChange = {this.myChangeHandler}/>; 
 		});
 
 		return(
@@ -140,7 +212,7 @@ class Form extends React.Component{
 				{resultsFormEntries}
 
 				<div>
-					<button> Submit </button>
+					<button onClick = {() => this.submitForm()}> Submit </button>
 					<button onClick = {() => this.hideForm()}> Cancel </button>
 				</div>
  
@@ -154,7 +226,7 @@ class ProcessFormEntry extends React.Component{
 		return(
 			<div className = "entry">
 				<div> {this.props.title} </div>
-				<input type="text"></input>
+				<input type="text" name = {this.props.name} onChange = {(x) => this.props.onChange(x)}></input> 
 			</div>
 		)
 	}
@@ -165,7 +237,7 @@ class ResultsFormEntry extends React.Component{
 		return(
 			<div className = "entry">
 				<div> {this.props.title} </div>
-				<input type="range"></input>
+				<input type="range" name = {this.props.name} onChange = {(x) => this.props.onChange(x)}></input>
 			</div>
 		)
 	}

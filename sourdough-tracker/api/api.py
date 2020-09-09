@@ -56,10 +56,10 @@ class BakesModel(db.Model):
 	overallQuality = db.Column(db.Integer())
 	rise = db.Column(db.Integer())
 	crumb = db.Column(db.Integer())
-	ear = db.Column(db.Integer())
+	crust = db.Column(db.Integer())
 	flavor = db.Column(db.Integer())
 
-	def __init__(self, gramsFlour, gramsWater, gramsStarter, numStretchFold, autolyseTime, bulkFermentTime, bakeTime, overallQuality, rise, crumb, ear, flavor):
+	def __init__(self, gramsFlour, gramsWater, gramsStarter, numStretchFold, autolyseTime, bulkFermentTime, bakeTime, overallQuality, rise, crumb, crust, flavor):
 		self.gramsFlour = gramsFlour
 		self.gramsWater = gramsWater
 		self.gramsStarter = gramsStarter
@@ -72,7 +72,7 @@ class BakesModel(db.Model):
 		self.overallQuality = overallQuality
 		self.rise = rise
 		self.crumb = crumb
-		self.ear = ear
+		self.crust = crust
 		self.flavor = flavor
 
 
@@ -86,7 +86,7 @@ def handle_bakes():
 	if request.method == 'POST':
 		if request.is_json:
 			data = request.get_json()
-			new_bake = BakesModel(gramsFlour=data['gramsFlour'], gramsWater = data['gramsWater'], gramsStarter = data['gramsStarter'], numStretchFold = data['numStretchFold'], autolyseTime = data['autolyseTime'], bulkFermentTime = data['bulkFermentTime'], bakeTime = data['bakeTime'], overallQuality = data['overallQuality'], rise = data['rise'], crumb = data['crumb'], ear = data['ear'], flavor = data['flavor'])
+			new_bake = BakesModel(gramsFlour=data['gramsFlour'], gramsWater = data['gramsWater'], gramsStarter = data['gramsStarter'], numStretchFold = data['numStretchFold'], autolyseTime = data['autolyseTime'], bulkFermentTime = data['bulkFermentTime'], bakeTime = data['bakeTime'], overallQuality = data['overallQuality'], rise = data['rise'], crumb = data['crumb'], crust = data['crust'], flavor = data['flavor'])
 			db.session.add(new_bake)
 			db.session.commit()
 			print('commited')
@@ -108,7 +108,7 @@ def handle_bakes():
 				"overallQuality": bake.overallQuality, 
 				"rise": bake.rise,
 				"crumb": bake.crumb,
-				"ear": bake.ear, 
+				"crust": bake.crust, 
 				"flavor": bake.flavor 
 			} for bake in bakes]
 
