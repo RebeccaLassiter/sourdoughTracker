@@ -14,10 +14,12 @@ import { useState, useEffect } from 'react';
 
 
 function Page(){
+
+	//here we will pull data from db and pass it to the Graph as props
 	const [currentTime, setCurrentTime] = useState(0);
 
 	useEffect(() => {
-	fetch('/time').then(res => res.json()).then(data => {
+	fetch('/space').then(res => res.json()).then(data => {
 	  setCurrentTime(data.time);
 	});
 	}, []);
