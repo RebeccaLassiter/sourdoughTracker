@@ -25,8 +25,21 @@ function Page(){
 	}, []);
 
 	//this bit should add data to the database
-	const data = {"name": "chevy", "model": "modelName", "doors": 5}
-	fetch("/cars", {
+	const data = {
+				"gramsFlour": 55.5,
+				"gramsWater": 23.2,
+				"gramsStarter": 5.01,
+				"numStretchFold": 5,
+				"autolyseTime": 15,
+				"bulkFermentTime": 55,
+				"bakeTime": 45,
+				"overallQuality": 7, 
+				"rise": 8,
+				"crumb": 6,
+				"ear": 9, 
+				"flavor": 5 
+			}
+	fetch("/bakes", {
         method:"POST",
         cache: "no-cache",
         headers:{

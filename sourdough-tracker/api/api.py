@@ -39,46 +39,80 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL #os.environ["DATABASE_URL"] #post
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-class CarsModel(db.Model):
-	__tablename__ = 'carsTest3'
+class BakesModel(db.Model):
+	__tablename__ = 'bakes'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String())
-	model = db.Column(db.String())
-	doors = db.Column(db.Integer())
+	gramsFlour = db.Column(db.Float())
+	gramsWater = db.Column(db.Float())
+	gramsStarter = db.Column(db.Float())
 
-	def __init__(self, name, model, doors):
-		self.name = name
-		self.model = model
-		self.doors = doors
+	numStretchFold = db.Column(db.Integer())
+
+	autolyseTime = db.Column(db.Float())
+	bulkFermentTime = db.Column(db.Float())
+	bakeTime = db.Column(db.Float())
+
+	overallQuality = db.Column(db.Integer())
+	rise = db.Column(db.Integer())
+	crumb = db.Column(db.Integer())
+	ear = db.Column(db.Integer())
+	flavor = db.Column(db.Integer())
+
+	def __init__(self, gramsFlour, gramsWater, gramsStarter, numStretchFold, autolyseTime, bulkFermentTime, bakeTime, overallQuality, rise, crumb, ear, flavor):
+		self.gramsFlour = gramsFlour
+		self.gramsWater = gramsWater
+		self.gramsStarter = gramsStarter
+
+		self.numStretchFold = numStretchFold
+		self.autolyseTime = autolyseTime
+		self.bulkFermentTime = bulkFermentTime
+		self.bakeTime = bakeTime
+
+		self.overallQuality = overallQuality
+		self.rise = rise
+		self.crumb = crumb
+		self.ear = ear
+		self.flavor = flavor
+
 
 	def __repr__(self):
-		return f"<Car {self.name}>"
+		#maybe give the bakes names? do something with this..
+		return f"<Bake {self.gramsFlour}>"
 
 
-@app.route('/cars', methods=['POST', 'GET'])
-def handle_cars():
+@app.route('/bakes', methods=['POST', 'GET'])
+def handle_bakes():
 	if request.method == 'POST':
 		if request.is_json:
 			data = request.get_json()
-			new_car = CarsModel(name=data['name'], model=data['model'], doors=data['doors'])
-			db.session.add(new_car)
+			new_bake = BakesModel(gramsFlour=data['gramsFlour'], gramsWater = data['gramsWater'], gramsStarter = data['gramsStarter'], numStretchFold = data['numStretchFold'], autolyseTime = data['autolyseTime'], bulkFermentTime = data['bulkFermentTime'], bakeTime = data['bakeTime'], overallQuality = data['overallQuality'], rise = data['rise'], crumb = data['crumb'], ear = data['ear'], flavor = data['flavor'])
+			db.session.add(new_bake)
 			db.session.commit()
 			print('commited')
-			return {"message": f"car {new_car.name} has been created successfully."}
+			return {"message": f"bake has been created successfully."}
 		else:
 			return {"error": "The request payload is not in JSON format"}
 
 	elif request.method == 'GET':
-		cars = CarsModel.query.all()
+		bakes = BakesModel.query.all()
 		results = [
 			{
-				"name": car.name,
-				"model": car.model,
-				"doors": car.doors
-			} for car in cars]
+				"gramsFlour": bake.gramsFlour,
+				"gramsWater": bake.gramsWater,
+				"gramsStarter": bake.gramsStarter,
+				"numStretchFold": bake.numStretchFold,
+				"autolyseTime": bake.autolyseTime,
+				"bulkFermentTime": bake.bulkFermentTime,
+				"bakeTime": bake.bakeTime,
+				"overallQuality": bake.overallQuality, 
+				"rise": bake.rise,
+				"crumb": bake.crumb,
+				"ear": bake.ear, 
+				"flavor": bake.flavor 
+			} for bake in bakes]
 
-		return {"count": len(results), "cars": results}
+		return {"count": len(results), "bakes": results}
 
 
 # @app.route('/cars/<car_id>', methods=['GET', 'PUT', 'DELETE'])
