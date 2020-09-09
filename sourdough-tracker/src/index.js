@@ -46,11 +46,10 @@ class Page extends React.Component{
 		
 
 	  
-	  	const currentTime = "hi"
 	    return(
 	    	<div className="App"> 
 	    		<OpenForm />
-	    		<Graph time ={currentTime}/>
+	    		<Graph data = {this.state.bakes}/>
 	    		<Form />
 	    		
 	    	</div> 
@@ -77,11 +76,11 @@ class Graph extends React.Component{
   render(){
  
 	
-	const currentTime = "hi"
+	//console.log(this.props.data[0])
     return (
         <div className="graph">
           <p>
-            Graph of Your Data Here and Data from flask: {this.props.time}
+            Graph of Your Data Here and Data from flask:  
           </p>
           
         </div>
@@ -136,21 +135,6 @@ class Form extends React.Component{
 	}
 
 	sendData(){
-		// const data = {
-		// 			"gramsFlour": 55.5,
-		// 			"gramsWater": 23.2,
-		// 			"gramsStarter": 5.01,
-		// 			"numStretchFold": 5,
-		// 			"autolyseTime": 15,
-		// 			"bulkFermentTime": 55,
-		// 			"bakeTime": 45,
-		// 			"overallQuality": 7, 
-		// 			"rise": 8,
-		// 			"crumb": 6,
-		// 			"ear": 9, 
-		// 			"flavor": 5 
-		// 		}
-
 		const data = this.state
 		fetch("/bakes", {
 	        method:"POST",
