@@ -13,49 +13,70 @@ import { useState, useEffect } from 'react';
 
 
 
-function Page(){
+class Page extends React.Component{
 
-	//here we will pull data from db and pass it to the Graph as props
-	const [currentTime, setCurrentTime] = useState(0);
+	constructor(props) {    
+      super(props);    
+      this.state = {      
+        bakes: null    
+      };  
+    }
 
-	useEffect(() => {
-	fetch('/space').then(res => res.json()).then(data => {
-	  setCurrentTime(data.time);
-	});
-	}, []);
+	render(){
 
-	//this bit should add data to the database
-	const data = {
-				"gramsFlour": 55.5,
-				"gramsWater": 23.2,
-				"gramsStarter": 5.01,
-				"numStretchFold": 5,
-				"autolyseTime": 15,
-				"bulkFermentTime": 55,
-				"bakeTime": 45,
-				"overallQuality": 7, 
-				"rise": 8,
-				"crumb": 6,
-				"ear": 9, 
-				"flavor": 5 
-			}
-	fetch("/bakes", {
-        method:"POST",
-        cache: "no-cache",
-        headers:{
-            "content_type":"application/json",
-        },
-        body:JSON.stringify(data)
-        })
-  
-    return(
-    	<div className="App"> 
-    		<OpenForm />
-    		<Graph time ={currentTime}/>
-    		<Form />
-    		
-    	</div> 
-    )
+		//here we will pull data from db and pass it to the Graph as props
+		// const [currentTime, setCurrentTime] = useState(0);
+
+		// useEffect(() => {
+		// fetch('/space').then(res => res.json()).then(data => {
+		//   setCurrentTime(data.time);
+		// });
+		// }, []);
+
+		//this bit should add data to the database
+		const data = {
+					"gramsFlour": 55.5,
+					"gramsWater": 23.2,
+					"gramsStarter": 5.01,
+					"numStretchFold": 5,
+					"autolyseTime": 15,
+					"bulkFermentTime": 55,
+					"bakeTime": 45,
+					"overallQuality": 7, 
+					"rise": 8,
+					"crumb": 6,
+					"ear": 9, 
+					"flavor": 5 
+				}
+		fetch("/bakes", {
+	        method:"POST",
+	        cache: "no-cache",
+	        headers:{
+	            "content_type":"application/json",
+	        },
+	        body:JSON.stringify(data)
+	        })
+
+		//getting the data from the data base
+		fetch('/bakes')
+		        .then(response => response.json())
+		        .then(data => this.setState({bakes: data}));
+
+
+		console.log("just got bakes data: ", this.state.bakes)
+		
+
+	  
+	  	const currentTime = "hi"
+	    return(
+	    	<div className="App"> 
+	    		<OpenForm />
+	    		<Graph time ={currentTime}/>
+	    		<Form />
+	    		
+	    	</div> 
+	    )
+    }
 }
 
 class OpenForm extends React.Component{
