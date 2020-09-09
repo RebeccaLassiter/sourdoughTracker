@@ -24,7 +24,16 @@ function Page(){
 	});
 	}, []);
 
-
+	//this bit should add data to the database
+	const data = {"name": "chevy", "model": "modelName", "doors": 5}
+	fetch("/cars", {
+        method:"POST",
+        cache: "no-cache",
+        headers:{
+            "content_type":"application/json",
+        },
+        body:JSON.stringify(data)
+        })
   
     return(
     	<div className="App"> 
