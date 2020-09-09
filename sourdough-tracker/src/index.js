@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import './index.css';
+import { useState, useEffect } from 'react';
 
 
 //color pallete is
@@ -42,10 +43,19 @@ class OpenForm extends React.Component{
 
 class Graph extends React.Component{
   render(){
+ //  	const [currentTime, setCurrentTime] = useState(0);
+
+	// useEffect(() => {
+	// fetch('/time').then(res => res.json()).then(data => {
+	//   setCurrentTime(data.time);
+	// });
+	// }, []);
+	
+	const currentTime = "hi"
     return (
         <div className="graph">
           <p>
-            Graph of Your Data Here
+            Graph of Your Data Here and Data from flask: {currentTime}
           </p>
           
         </div>
@@ -77,9 +87,9 @@ class Form extends React.Component{
 
 		return(
 			<div id = "form">
-				<div class = "formHeader"> Tell Us About Your Process... </div>
+				<div className = "formHeader"> Tell Us About Your Process... </div>
 				{processFormEntries}
-				<div class = "formHeader"> And Your Results </div>
+				<div className = "formHeader"> And Your Results </div>
 				{resultsFormEntries}
 
 				<div>
@@ -95,7 +105,7 @@ class Form extends React.Component{
 class ProcessFormEntry extends React.Component{
 	render(){
 		return(
-			<div class = "entry">
+			<div className = "entry">
 				<div> {this.props.title} </div>
 				<input type="text"></input>
 			</div>
@@ -106,7 +116,7 @@ class ProcessFormEntry extends React.Component{
 class ResultsFormEntry extends React.Component{
 	render(){
 		return(
-			<div class = "entry">
+			<div className = "entry">
 				<div> {this.props.title} </div>
 				<input type="range"></input>
 			</div>
