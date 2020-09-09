@@ -163,6 +163,7 @@ class Form extends React.Component{
 	}
 
 	hideForm(){
+		document.getElementById("form").reset();
 		document.getElementById("form").style.display = "none";
 		
 	}
@@ -205,7 +206,7 @@ class Form extends React.Component{
 		});
 
 		return(
-			<div id = "form">
+			<form id = "form">
 				<div className = "formHeader"> Tell Us About Your Process... </div>
 				{processFormEntries}
 				<div className = "formHeader"> And Your Results </div>
@@ -216,7 +217,7 @@ class Form extends React.Component{
 					<button onClick = {() => this.hideForm()}> Cancel </button>
 				</div>
  
-			</div> 
+			</form> 
 		)
 	}
 }
