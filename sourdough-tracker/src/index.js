@@ -13,17 +13,25 @@ import { useState, useEffect } from 'react';
 
 
 
-class Page extends React.Component{
-  render(){
+function Page(){
+	const [currentTime, setCurrentTime] = useState(0);
+
+	useEffect(() => {
+	fetch('/time').then(res => res.json()).then(data => {
+	  setCurrentTime(data.time);
+	});
+	}, []);
+
+
+  
     return(
     	<div className="App"> 
     		<OpenForm />
-    		<Graph />
+    		<Graph time ={currentTime}/>
     		<Form />
     		
     	</div> 
     )
-  }
 }
 
 class OpenForm extends React.Component{
@@ -43,19 +51,13 @@ class OpenForm extends React.Component{
 
 class Graph extends React.Component{
   render(){
- //  	const [currentTime, setCurrentTime] = useState(0);
-
-	// useEffect(() => {
-	// fetch('/time').then(res => res.json()).then(data => {
-	//   setCurrentTime(data.time);
-	// });
-	// }, []);
+ 
 	
 	const currentTime = "hi"
     return (
         <div className="graph">
           <p>
-            Graph of Your Data Here and Data from flask: {currentTime}
+            Graph of Your Data Here and Data from flask: {this.props.time}
           </p>
           
         </div>
