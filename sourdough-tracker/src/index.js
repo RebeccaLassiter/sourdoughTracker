@@ -15,46 +15,16 @@ import { useState, useEffect } from 'react';
 
 class Page extends React.Component{
 
-	constructor(props) {    
-      super(props);    
-      this.state = {      
-        bakes: null    
-      };  
-    }
-
 	render(){
-
-		//here we will pull data from db and pass it to the Graph as props
-		// const [currentTime, setCurrentTime] = useState(0);
-
-		// useEffect(() => {
-		// fetch('/space').then(res => res.json()).then(data => {
-		//   setCurrentTime(data.time);
-		// });
-		// }, []);
-
-		//this bit should add data to the database
-		
-
-		//getting the data from the data base
-		fetch('/bakes')
-		        .then(response => response.json())
-		        .then(data => this.setState({bakes: data}));
-
-
-		// console.log("just got data", this.state.bakes)
-		
-
-	  
-	    return(
-	    	<div className="App"> 
-	    		<OpenForm />
-	    		<Graph data = {this.state.bakes}/>
-	    		<Form />
-	    		
-	    	</div> 
-	    )
-    }
+		return(
+			<div className="App"> 
+				<OpenForm />
+				<Graph />
+				<Form />
+				
+			</div> 
+		)
+	}
 }
 
 class OpenForm extends React.Component{
@@ -73,27 +43,53 @@ class OpenForm extends React.Component{
 }
 
 class Graph extends React.Component{
-  render(){
- 
-	
-	//console.log(this.props.data[0])
-    return (
-        <div className="graph">
-          <p>
-            Graph of Your Data Here and Data from flask:  
-          </p>
-          
-        </div>
-    );
+
+	constructor(props) {    
+	  super(props);    
+	  this.state = {      
+		bakes: null    
+	  };  
+	}
+
+	render(){
+
+		fetch('/bakes')
+					.then(response => response.json())
+					.then(data => this.setState(data));
+
+		const myData = this.state['bakes']
+
+		//need this if else if the fetch fails for some reason
+		if(myData){
+			return(
+					<div className="graph">
+				  <p>
+					Graph of Your Data Here and Data from flask: {myData[0]['autolyseTime']}
+				  </p>
+				  
+				</div>
+				);
+		}
+		else{
+			return (
+					<div className="graph">
+				  <p>
+					Graph of Your Data Here and Data from flask:
+				  </p>
+				  
+				</div>
+				);
+		}
+		
   }
 }
 
 class Form extends React.Component{
 
 	constructor(props) {    
-      super(props);    
-      this.state = {      
-        			"gramsFlour": null,
+	  super(props);    
+	  this.state = {      
+					"gramsFlour": null,
 					"gramsWater": null,
 					"gramsStarter": null,
 					"numStretchFold": null,
@@ -105,11 +101,11 @@ class Form extends React.Component{
 					"crumb": null,
 					"crust": null, 
 					"flavor": null    
-      };  
-    }
+	  };  
+	}
 
 	submitForm(){
-
+		console.log("submitting form")
 		this.sendData()
 		this.hideForm()
 	
@@ -117,7 +113,7 @@ class Form extends React.Component{
 
 	cancelForm(){
 		this.setState({      
-        			"gramsFlour": null,
+					"gramsFlour": null,
 					"gramsWater": null,
 					"gramsStarter": null,
 					"numStretchFold": null,
@@ -129,21 +125,22 @@ class Form extends React.Component{
 					"crumb": null,
 					"crust": null, 
 					"flavor": null    
-      	});
+		});
 		this.hideForm();
 
 	}
 
 	sendData(){
+		console.log("in send data")
 		const data = this.state
 		fetch("/bakes", {
-	        method:"POST",
-	        cache: "no-cache",
-	        headers:{
-	            "content_type":"application/json",
-	        },
-	        body:JSON.stringify(data)
-	        })
+			method:"POST",
+			cache: "no-cache",
+			headers:{
+				"content_type":"application/json",
+			},
+			body:JSON.stringify(data)
+			})
 	}
 
 	hideForm(){
@@ -160,12 +157,12 @@ class Form extends React.Component{
 
 	render(){
 		const processFormEntryTitles = ["Amount of Flour (grams)", "Amount of Water (grams)", "Amount of Sourdough Starter (grams)",
-							     "Number of Stretch and Folds", "Autolyse Time (minutes)", "Bulk Fermentation Time (minutes)", "Bake Time (minutes)",
-							     ]
+								 "Number of Stretch and Folds", "Autolyse Time (minutes)", "Bulk Fermentation Time (minutes)", "Bake Time (minutes)",
+								 ]
 		const resultsFormEntryTitles = ["Overall Quality", "Rise", "Crumb", "Crust", "Flavor"]
 
 		const mapTitlesToState = {      
-        			"Amount of Flour (grams)": "gramsFlour",
+					"Amount of Flour (grams)": "gramsFlour",
 					"Amount of Water (grams)": "gramsWater",
 					"Amount of Sourdough Starter (grams)": "gramsStarter",
 					"Number of Stretch and Folds": "numStretchFold",
@@ -177,7 +174,7 @@ class Form extends React.Component{
 					"Crumb": "crumb",
 					"Crust": "crust", 
 					"Flavor":"flavor"    
-      }
+	  }
 
 		const processFormEntries = processFormEntryTitles.map( x =>
 		{
