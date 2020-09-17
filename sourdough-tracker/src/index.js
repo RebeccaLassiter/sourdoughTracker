@@ -15,12 +15,34 @@ import { useState, useEffect } from 'react';
 
 class Page extends React.Component{
 
+	//after submitting form, the form fetches the new set of data from database
+	//passes that data up to the page compnent, page passes it down to graph
+
+	//in constructor, iniitial fetche request
+
+	constructor(props) {    
+	  super(props);    
+	}
+
+	//initial fetch request
+	componentDidMount() {
+        fetch('/bakes')
+					.then(response => response.json())
+					.then(data => this.setState(data))
+					.then(ans => console.log(this.state));
+    }
+
+    callbackFunction = (updatedData) => {this.setState({message: updatedData})};
+	
+
 	render(){
 		return(
 			<div className="App"> 
 				<OpenForm />
-				<Graph />
-				<Form />
+				{this.state && 
+				<Graph data={this.state}/>
+			}
+				<Form parentCallback = {this.callbackFunction}/>
 				
 			</div> 
 		)
@@ -46,25 +68,30 @@ class Graph extends React.Component{
 
 	constructor(props) {    
 	  super(props);    
-	  this.state = {      
-		bakes: null    
-	  };  
+	 //  this.state = {      
+		// bakes: null    
+	 //  };  
+
+	  this.state = this.props.data;
+
+	  console.log("in graph constructor")
+	  console.log(this.state);
 	}
 
 	render(){
 
-		fetch('/bakes')
-					.then(response => response.json())
-					.then(data => this.setState(data));
+
 
 		const myData = this.state['bakes']
 
-		//need this if else if the fetch fails for some reason
+		//need this if else if the fetch fails for some reason or if we are passed null data
+
+		//{myData[0]['autolyseTime']}
 		if(myData){
 			return(
 					<div className="graph">
 				  <p>
-					Graph of Your Data Here and Data from flask: {myData[0]['autolyseTime']}
+					Graph of Your Data Here and Data from flask: {myData.length} 
 				  </p>
 				  
 				</div>
@@ -108,6 +135,9 @@ class Form extends React.Component{
 		console.log("submitting form")
 		this.sendData()
 		this.hideForm()
+
+		//passing the state data up to the Page
+		this.props.parentCallback(this.state)
 	
 	}
 
