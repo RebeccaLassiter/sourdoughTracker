@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import './index.css';
 import { useState, useEffect } from 'react';
+import * as d3 from 'd3'
 
 
 //color pallete is
@@ -15,16 +16,12 @@ import { useState, useEffect } from 'react';
 
 class Page extends React.Component{
 
-	//after submitting form, the form fetches the new set of data from database
-	//passes that data up to the page compnent, page passes it down to graph
-
-	//in constructor, iniitial fetche request
 
 	constructor(props) {    
 	  super(props);    
 	}
 
-	//initial fetch request
+	//getting initial data
 	componentDidMount() {
         fetch('/bakes')
 					.then(response => response.json())
@@ -32,7 +29,7 @@ class Page extends React.Component{
 					.then(ans => console.log(this.state));
     }
 
-    callbackFunction = (updatedData) => {this.setState({message: updatedData})};
+    callbackFunction = (updatedData) => {this.setState(updatedData)};
 	
 
 	render(){
@@ -68,9 +65,6 @@ class Graph extends React.Component{
 
 	constructor(props) {    
 	  super(props);    
-	 //  this.state = {      
-		// bakes: null    
-	 //  };  
 
 	  this.state = this.props.data;
 
@@ -78,35 +72,71 @@ class Graph extends React.Component{
 	  console.log(this.state);
 	}
 
+	componentDidMount() {
+
+		//console.log("data is: ", this.state['bakes'])
+        this.drawChart(this.state['bakes'])
+    }
+
+
+    //d3 creating the actual chart
+    drawChart(data){
+
+    	console.log("data is ", data)
+
+    	const scale = 20; 
+
+    	const svgCanvas = d3.select(this.refs.canvas)
+						    .append("svg")
+						    .attr("width", 600)
+						    .attr("height", 400)
+						    .style("border", "1px solid black");
+
+
+		//each datapoint is a different bake entry
+	    svgCanvas.selectAll("rect")
+			    .data(data).enter()
+			         .append("rect")
+			         .attr("width", 40)
+			         .attr("height", (datapoint) => datapoint['autolyseTime'] * scale)
+			         .attr("fill", "orange")
+			         .attr("x", (datapoint, iteration) => iteration * 45)
+        			 .attr("y", (datapoint) => 400 - datapoint['autolyseTime'] * scale);
+
+
+
+
+    }
+
 	render(){
 
+		return <div ref="canvas"></div>
 
+		// const myData = this.state['bakes']
 
-		const myData = this.state['bakes']
+		// //need this if else if the fetch fails for some reason or if we are passed null data
 
-		//need this if else if the fetch fails for some reason or if we are passed null data
-
-		//{myData[0]['autolyseTime']}
-		if(myData){
-			return(
-					<div className="graph">
-				  <p>
-					Graph of Your Data Here and Data from flask: {myData.length} 
-				  </p>
+		// //{myData[0]['autolyseTime']}
+		// if(myData){
+		// 	return(
+		// 			<div className="graph">
+		// 		  <p>
+		// 			Graph of Your Data Here and Data from flask: {myData.length} 
+		// 		  </p>
 				  
-				</div>
-				);
-		}
-		else{
-			return (
-					<div className="graph">
-				  <p>
-					Graph of Your Data Here and Data from flask:
-				  </p>
+		// 		</div>
+		// 		);
+		// }
+		// else{
+		// 	return (
+		// 			<div className="graph">
+		// 		  <p>
+		// 			Graph of Your Data Here and Data from flask:
+		// 		  </p>
 				  
-				</div>
-				);
-		}
+		// 		</div>
+		// 		);
+		//}
 		
   }
 }
