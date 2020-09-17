@@ -84,24 +84,67 @@ class Graph extends React.Component{
 
     	console.log("data is ", data)
 
-    	const scale = 20; 
+    	// const scale = 20; 
 
-    	const svgCanvas = d3.select(this.refs.canvas)
-						    .append("svg")
-						    .attr("width", 600)
-						    .attr("height", 400)
-						    .style("border", "1px solid black");
+    	// const height = 400; 
+    	// const width = 600; 
+
+    	// const svg = d3.select(this.refs.canvas)
+					// 	    .append("svg")
+					// 	    .attr("width", 600)
+					// 	    .attr("height", 400)
+					// 	    .style("border", "1px solid black");
+
+					var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+		var svg = d3.select(this.refs.canvas)
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")")
+
+    	// Add X axis
+		  var x = d3.scaleLinear()
+		    .domain([0, 100])
+		    .range([ 0, width ]);
+		  svg.append("g")
+		    .attr("transform", "translate(0," + height + ")")
+		    .call(d3.axisBottom(x));
+
+		  // Add Y axis
+		  var y = d3.scaleLinear()
+		    .domain([0, 100])
+		    .range([ height, 0]);
+		  svg.append("g")
+		    .call(d3.axisLeft(y));
+
+		  // Add dots
+		  svg.append('g')
+		    .selectAll("dot")
+		    .data(data)
+		    .enter()
+		    .append("circle")
+		      .attr("cx", function (d) { return x(d['autolyseTime']); } )
+		      .attr("cy", function (d) { return y(d['overallQuality']); } )
+		      .attr("r", 4)
+		      .style("fill", "#1f2041")
+
+    	
 
 
-		//each datapoint is a different bake entry
-	    svgCanvas.selectAll("rect")
-			    .data(data).enter()
-			         .append("rect")
-			         .attr("width", 40)
-			         .attr("height", (datapoint) => datapoint['autolyseTime'] * scale)
-			         .attr("fill", "orange")
-			         .attr("x", (datapoint, iteration) => iteration * 45)
-        			 .attr("y", (datapoint) => 400 - datapoint['autolyseTime'] * scale);
+		// //each datapoint is a different bake entry
+	 //    svgCanvas.selectAll("rect")
+		// 	    .data(data).enter()
+		// 	         .append("rect")
+		// 	         .attr("width", 40)
+		// 	         .attr("height", (datapoint) => datapoint['autolyseTime'] * scale)
+		// 	         .attr("fill", "orange")
+		// 	         .attr("x", (datapoint, iteration) => iteration * 45)
+  //       			 .attr("y", (datapoint) => 400 - datapoint['autolyseTime'] * scale);
 
 
 
