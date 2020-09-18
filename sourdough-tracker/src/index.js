@@ -52,7 +52,12 @@ class Page extends React.Component{
 
 		
 			<div className="App"> 
+				
+				<div className = "title" > What Makes a Sourdough Bake Successful?  </div>
 				<OpenForm />
+
+
+
 				{this.state && 
 				<Graph data={this.state} mapTitlesToState = {mapTitlesToState}/>
 			}
@@ -130,7 +135,7 @@ class Graph extends React.Component{
 
 		  // Add Y axis
 		var y = d3.scaleLinear()
-					.domain([0, 100])
+					.domain([0, 10])
 					.range([ height, 0]);
 				  svg.append("g")
 					.call(d3.axisLeft(y));
@@ -138,22 +143,22 @@ class Graph extends React.Component{
 
 
 		// Add X axis label:
-  svg.append("text")
-	  .attr("text-anchor", "end")
-	  .attr("x", width/2 + margin.left)
-	  .attr("y", height + margin.top + 20)
-	  .text(xAxisTitle);
+		svg.append("text")
+		  .attr("text-anchor", "end")
+		  .attr("x", width/2 + margin.left)
+		  .attr("y", height + margin.top + 25)
+		  .text(xAxisTitle);
 
-  // Y axis label:
-  svg.append("text")
-	  .attr("text-anchor", "end")
-	  .attr("transform", "rotate(-90)")
-	  .attr("y", -margin.left + 20)
-	  .attr("x", -margin.top - height/2 + 20)
-	  .text(yAxisTitle)
+		  // Y axis label:
+		svg.append("text")
+			  .attr("text-anchor", "end")
+			  .attr("transform", "rotate(-90)")
+			  .attr("y", -margin.left + 20)
+			  .attr("x", -margin.top - height/2 + 20)
+			  .text(yAxisTitle)
 
 		  // Add dots
-		  svg.append('g')
+		svg.append('g')
 			.selectAll("dot")
 			.data(data)
 			.enter()
@@ -172,7 +177,7 @@ class Graph extends React.Component{
 
 	render(){
 
-		return <div ref="canvas"></div>
+		return (<div ref="canvas"></div>)
 	}
 }
 
@@ -256,20 +261,6 @@ class Form extends React.Component{
 								 ]
 		const resultsFormEntryTitles = ["Overall Quality", "Rise", "Crumb", "Crust", "Flavor"]
 
-		// const mapTitlesToState = {      
-		// 			"Amount of Flour (grams)": "gramsFlour",
-		// 			"Amount of Water (grams)": "gramsWater",
-		// 			"Amount of Sourdough Starter (grams)": "gramsStarter",
-		// 			"Number of Stretch and Folds": "numStretchFold",
-		// 			"Autolyse Time (minutes)": "autolyseTime",
-		// 			"Bulk Fermentation Time (minutes)": "bulkFermentTime",
-		// 			"Bake Time (minutes)": "bakeTime",
-		// 			"Overall Quality": "overallQuality",
-		// 			"Rise": "rise",
-		// 			"Crumb": "crumb",
-		// 			"Crust": "crust", 
-		// 			"Flavor":"flavor"    
-	 //  }
 
 		const processFormEntries = processFormEntryTitles.map( x =>
 		{
@@ -314,7 +305,7 @@ class ResultsFormEntry extends React.Component{
 		return(
 			<div className = "entry">
 				<div> {this.props.title} </div>
-				<input type="range" name = {this.props.name} onChange = {(x) => this.props.onChange(x)}></input>
+				<input type="range" min="1" max="10" name = {this.props.name} onChange = {(x) => this.props.onChange(x)}></input>
 			</div>
 		)
 	}

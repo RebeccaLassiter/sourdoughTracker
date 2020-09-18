@@ -13,9 +13,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: #1f2041;
+
+  font-family: Sans-Serif;
 }
 
-.graph{
+.title{
+	margin-bottom: 20vh;
+	font-size: calc(10px + 5vmin);
 	
 }
 
