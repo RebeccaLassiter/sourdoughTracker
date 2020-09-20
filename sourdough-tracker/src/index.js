@@ -88,26 +88,32 @@ class Graph extends React.Component{
 	constructor(props) {    
 	  super(props);    
 
-	  this.state = this.props.data;
+	  this.state = {"data": this.props.data,
+	  				"xCateogry": 'autolyseTime',
+	  				"yCategory": 'overallQuality'}
 
 	  console.log("in graph constructor")
 	  console.log(this.state);
 	}
 
 	componentDidMount() {
-		this.drawChart(this.state['bakes'])
+		this.drawChart(this.state['data']['bakes'])
 	}
 
 	getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
 	}
 
+
+
 	//d3 creating the actual chart
 	drawChart(data){
 
+		d3.selectAll("svg > *").remove();
+
 		//these two values should be changed by user selecting from dropdown
-		const xAxisVal = 'autolyseTime'
-		const yAxisVal = 'overallQuality'
+		const xAxisVal = this.state.xCateogry
+		const yAxisVal = this.state.yCategory
 		const xAxisTitle = this.getKeyByValue(this.props.mapTitlesToState, xAxisVal)
 		const yAxisTitle = this.getKeyByValue(this.props.mapTitlesToState, yAxisVal)
 
@@ -125,9 +131,92 @@ class Graph extends React.Component{
 						.attr("transform",
 							  "translate(" + margin.left + "," + margin.top + ")")
 
-		// Add X axis
+		this.updateChart(data)
+		this.dropDown(data)
+
+	}
+
+	dropDown(dataSource){
+
+		const processFormEntryTitles = ["Amount of Flour (grams)", "Amount of Water (grams)", "Amount of Sourdough Starter (grams)",
+								 "Number of Stretch and Folds", "Autolyse Time (minutes)", "Bulk Fermentation Time (minutes)", "Bake Time (minutes)",
+								 ]
+		const resultsFormEntryTitles = ["Overall Quality", "Rise", "Crumb", "Crust", "Flavor"]
+                  //creates the dropdown with the language options
+       d3.select("body")
+          .append("select")
+          .attr("id", "xDropdown");
+          
+      //adds all the options to the dropdown
+        //d3.select("xDropdown")
+        d3.selectAll("select")
+          .selectAll("option")
+          .data(processFormEntryTitles)
+          .enter().append("option")
+          .text(function(d){
+                  return d;
+          });
+
+          d3.select("body")
+          .append("select")
+          .attr("id", "yDropdown");
+          
+      //adds all the options to the dropdown
+        //d3.select("yDropdown")
+        d3.selectAll("select")
+          .selectAll("option")
+          .data(resultsFormEntryTitles)
+          .enter().append("option")
+          .text(function(d){
+                  return d;
+          });
+
+        const graph = this; 
+      //when users select a lang from the dropdown
+        d3.select("#xDropdown")
+          .on('change', function(d) {
+          	console.log(this.value)
+          	//graph.setState = {'xCateogry': this.value}
+            graph.state['xCateogry'] = graph.props.mapTitlesToState[this.value];
+            console.log("updated state is: ", graph.state)
+
+            //graph.drawChart(dataSource)
+            graph.updateChart(dataSource)
+            //updateMap(dataSource);
+            });
+
+
+          d3.select("#yDropdown")
+          .on('change', function(d) {
+          	console.log(this.value)
+          	//graph.setState = {'xCateogry': this.value}
+            graph.state['yCategory'] = graph.props.mapTitlesToState[this.value];
+            console.log("updated state is: ", graph.state)
+
+            //graph.drawChart(dataSource)
+            graph.updateChart(dataSource)
+            //updateMap(dataSource);
+            });
+    }
+
+    updateChart(data){
+    	d3.selectAll("svg > *").remove();
+
+		//these two values should be changed by user selecting from dropdown
+		const xAxisVal = this.state.xCateogry
+		const yAxisVal = this.state.yCategory
+		const xAxisTitle = this.getKeyByValue(this.props.mapTitlesToState, xAxisVal)
+		const yAxisTitle = this.getKeyByValue(this.props.mapTitlesToState, yAxisVal)
+
+		var margin = {top: 10, right: 30, bottom: 30, left: 60},
+		width = 460 - margin.left - margin.right,
+		height = 400 - margin.top - margin.bottom;
+
+    	const svg = d3.select("svg")
+
+
 		var x = d3.scaleLinear()
-					.domain([0, 100])
+					.domain([0, 300])
 					.range([ 0, width ]);
 				  svg.append("g")
 					.attr("transform", "translate(0," + height + ")")
@@ -140,9 +229,7 @@ class Graph extends React.Component{
 				  svg.append("g")
 					.call(d3.axisLeft(y));
 
-
-
-		// Add X axis label:
+    	// Add X axis label:
 		svg.append("text")
 		  .attr("text-anchor", "end")
 		  .attr("x", width/2 + margin.left)
@@ -168,12 +255,7 @@ class Graph extends React.Component{
 			  .attr("r", 4)
 			  .style("fill", "#1f2041");
 
-		
-
-
-
-
-	}
+    }
 
 	render(){
 
